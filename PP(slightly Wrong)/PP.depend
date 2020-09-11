@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1595570612 source:c:\users\nikki\desktop\projects to pass in os\pp\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+
+1595570612 source:c:\users\nikki\desktop\projects to pass in os\pp(slightly wrong)\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+

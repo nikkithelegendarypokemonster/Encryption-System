@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1597138378 source:c:\users\nikki\desktop\projects to pass in os\menu\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"GENERAL.h"
+	"FCFS.h"
+	"SJF.h"
+	"SRTF.h"
+	"PP.h"
+	"NPP.h"
+	"RR.h"
+
+1597141552 c:\users\nikki\desktop\projects to pass in os\menu\fcfs.h
+	<windows.h>
+
+1597145015 c:\users\nikki\desktop\projects to pass in os\menu\sjf.h
+
+1597140105 c:\users\nikki\desktop\projects to pass in os\menu\srtf.h
+	<conio.h>
+
+1597138378 c:\users\nikki\desktop\projects to pass in os\menu\general.h
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1597140790 c:\users\nikki\desktop\projects to pass in os\menu\pp.h
+
+1597141567 c:\users\nikki\desktop\projects to pass in os\menu\npp.h
+
+1597139814 c:\users\nikki\desktop\projects to pass in os\menu\rr.h
+

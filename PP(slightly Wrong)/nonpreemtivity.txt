@@ -1,0 +1,59 @@
+//do a non preemtive priority
+//set cur_start by least_AT and dont set the cur end
+    cur_start=least_AT(n);
+    while(terminate(n)==0)
+    {
+        checker(n);
+        while(proc[i].CPU1<0)
+        {
+            i++;
+        }
+//SORT BY AT
+        sort(i,n);
+        point=highest_priority(i,n);
+        printf("P%d : %d,",proc[point].name,proc[point].prio);
+    if(cur_end>proc[point].AT){
+    proc[point].S=cur_end;
+    proc[point].s[proc[point].sp]=proc[point].S;
+    proc[point].sp++;
+    }else{
+    proc[point].S=proc[point].AT;
+    proc[point].s[proc[point].sp]=proc[point].S;
+    proc[point].sp++;
+    }
+
+    //Set End
+    proc[point].E=proc[point].S + proc[point].CPU1;
+    proc[point].CPU1=-1;
+    proc[point].e[proc[point].ep]=proc[point].E;
+    proc[point].ep++;
+    //Set cur_end to End
+    cur_end=proc[point].E;
+    //Save AT to AT array
+    proc[point].at[proc[point].ap]=proc[point].AT;
+    proc[point].ap++;
+    }
+
+
+
+  system("cls");
+for(int i=0;i<total;i++){
+    printf("P%d\n",proc[i].name);
+    printf("AT: ");
+    for(int k=0;k<proc[i].ap;k++){
+        printf("%d, ",proc[i].at[k]);
+    }
+    printf("\n");
+    printf("Priority: %d\n",proc[i].prio);
+    printf("CPU1: %d\n",proc[i].CPU1);
+    printf("Start: ");
+    for(int k=0;k<proc[i].sp;k++){
+        printf("%d, ",proc[i].s[k]);
+    }
+    printf("\n");
+    printf("End: ");
+    for(int k=0;k<proc[i].ep;k++){
+        printf("%d,",proc[i].e[k]);
+    }
+    printf("\n");
+}

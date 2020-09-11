@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1595903420 source:c:\users\nikki\desktop\projects to pass in os\srtff(c++)\main.cpp
+	<stdio.h>
+	<conio.h>
+	<iostream>
+

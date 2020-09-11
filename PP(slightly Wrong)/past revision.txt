@@ -1,0 +1,341 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<conio.h>
+int cur_end=0,cur_start=0,min_burst=0,n=0;
+typedef struct Proc
+{
+    int name;
+    int AT,CPU1,CPU2,IO,S,E;
+    //priority
+    int prio;
+    int at[200],s[200],e[200];
+    int ap,sp,ep;
+} process[200],temporary;
+process proc;
+temporary temp;
+
+void checker(int n)
+{
+    for(int i=0; i<n; i++)
+    {
+        if(proc[i].CPU1<0)
+        {
+            for(int k=i; k>0; k--)
+            {
+                temp=proc[k];
+                proc[k]=proc[k-1];
+                proc[k-1]=temp;
+            }
+        }
+    }
+}
+int terminate(int n)
+{
+    for(int i=0; i<n; i++)
+    {
+        if(proc[i].CPU1>=0)
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int least_AT(int n)
+{
+    int min=proc[0].AT;
+    for(int i=0; i<n; i++)
+    {
+        if(proc[i].AT<=min)
+        {
+            min=proc[i].AT;
+        }
+    }
+    return min;
+}
+void sort(int s,int n)
+{
+// Bubblesort by AT
+    for(int i=s; i<n; i++)
+    {
+        for(int k=s; k<n-1; k++)
+        {
+            if(proc[k].AT>=proc[k+1].AT)
+            {
+                temp=proc[k];
+                proc[k]=proc[k+1];
+                proc[k+1]=temp;
+            }
+        }
+}
+}
+int find_next(int cur,int n){
+    for(int i=cur+1;i<n;i++){
+    if(proc[i].prio<proc[cur].prio && proc[cur-1].AT>=cur_start && proc[cur-1].AT<=cur_end ){
+                return i;
+        }
+    }
+    return cur;
+}
+int highest_priority(int s,int n){
+ int loc=s;
+    for(int i=s+1; i<n; i++)
+    {
+        if(proc[i].AT>=cur_start && proc[i].AT<=cur_end && proc[i].prio<=proc[s].prio)
+        {
+         //if theres an equal on priorities
+         if(proc[i].prio==proc[s].prio){
+            if(proc[i].AT< proc[s].AT){
+                loc=i;
+            }
+         }else{
+            loc=i;
+         }
+        }
+    }
+return loc;
+}
+int main()
+{
+    int i=0,point=0,total,max_at=0;
+//get nth processes
+    printf("PP\n");
+    printf("How many processes:");
+    scanf("%d",&n);
+    total=n;
+// get inputs
+    for(int i=0; i<n; i++)
+    {
+        printf("P%d:\n",i+1);
+        proc[i].name=i+1;
+        printf("AT:");
+        scanf("%d",&proc[i].AT);
+        printf("Priority:");
+        scanf("%d",&proc[i].prio);
+        printf("CPU1:");
+        scanf("%d",&proc[i].CPU1);
+        if(proc[i].AT>=max_at){
+            max_at=proc[i].AT;
+        }
+    }
+    sort(i,n);
+    //set starting cur_end by least AT and cur_start by least_AT
+    cur_end=cur_start=least_AT(n);
+//MAIN CYCLE
+//do preemtive version first
+    while(cur_end<=max_at)
+    {
+    // variable i = current process
+    // variable point = next process
+        //find the next process by Priority
+        if(proc[i].CPU1<0){
+            i++;
+            point=find_next(i,n);
+        }else{
+        i=point;
+        point=find_next(i,n);
+        }
+      //  printf("point:%d",point);
+      //  printf("curend:%d, i:%d \n ",cur_end,i);
+        proc[i].S=cur_end;
+        proc[i].s[proc[i].sp]=proc[i].S;
+        proc[i].sp++;
+
+        if(cur_end>=max_at || i==point){
+            proc[i].E=cur_end+proc[point].CPU1;
+            proc[i].CPU1=0;
+            cur_end=proc[i].E;
+        }else{
+            if((proc[i].CPU1 + proc[i].AT)<proc[point].AT){
+                proc[i].E=proc[i].CPU1;
+                proc[i].CPU1=0;
+                cur_end=proc[point].AT;
+            }else{
+            proc[i].E=proc[point].AT;
+            proc[i].CPU1-=(proc[point].AT -proc[i].AT);
+            cur_end=proc[i].E;
+            }
+
+        }
+
+        proc[i].e[proc[i].ep]=proc[i].E;
+        proc[i].ep++;
+        if(proc[i].CPU1<=0){
+            proc[i].CPU1=-1;
+        }
+        //Save AT to AT array
+        proc[i].at[proc[i].ap]=proc[i].AT;
+        proc[i].ap++;
+
+   }
+    system("cls");
+for(int i=0;i<total;i++){
+    printf("P%d\n",proc[i].name);
+    printf("AT: ");
+    for(int k=0;k<proc[i].ap;k++){
+        printf("%d, ",proc[i].at[k]);
+    }
+    printf("\n");
+    printf("Priority: %d\n",proc[i].prio);
+    printf("CPU1: %d\n",proc[i].CPU1);
+    printf("Start: ");
+    for(int k=0;k<proc[i].sp;k++){
+        printf("%d, ",proc[i].s[k]);
+    }
+    printf("\n");
+    printf("End: ");
+    for(int k=0;k<proc[i].ep;k++){
+        printf("%d,",proc[i].e[k]);
+    }
+    printf("\n");
+}
+   getch();
+   i=0;
+   point=0;
+
+//do a non preemtive priority
+//set cur_start by least_AT and dont set the cur end
+    cur_start=least_AT(n);
+    while(terminate(n)==0)
+    {
+        checker(n);
+        while(proc[i].CPU1<0)
+        {
+            i++;
+        }
+//SORT BY AT
+        sort(i,n);
+        point=highest_priority(i,n);
+        printf("P%d : %d,",proc[point].name,proc[point].prio);
+    if(cur_end>proc[point].AT){
+    proc[point].S=cur_end;
+    proc[point].s[proc[point].sp]=proc[point].S;
+    proc[point].sp++;
+    }else{
+    proc[point].S=proc[point].AT;
+    proc[point].s[proc[point].sp]=proc[point].S;
+    proc[point].sp++;
+    }
+
+    //Set End
+    proc[point].E=proc[point].S + proc[point].CPU1;
+    proc[point].CPU1=-1;
+    proc[point].e[proc[point].ep]=proc[point].E;
+    proc[point].ep++;
+    //Set cur_end to End
+    cur_end=proc[point].E;
+    //Save AT to AT array
+    proc[point].at[proc[point].ap]=proc[point].AT;
+    proc[point].ap++;
+    }
+
+
+
+  system("cls");
+for(int i=0;i<total;i++){
+    printf("P%d\n",proc[i].name);
+    printf("AT: ");
+    for(int k=0;k<proc[i].ap;k++){
+        printf("%d, ",proc[i].at[k]);
+    }
+    printf("\n");
+    printf("Priority: %d\n",proc[i].prio);
+    printf("CPU1: %d\n",proc[i].CPU1);
+    printf("Start: ");
+    for(int k=0;k<proc[i].sp;k++){
+        printf("%d, ",proc[i].s[k]);
+    }
+    printf("\n");
+    printf("End: ");
+    for(int k=0;k<proc[i].ep;k++){
+        printf("%d,",proc[i].e[k]);
+    }
+    printf("\n");
+}
+    return 0;
+}
+
+/*
+7
+0
+3
+8
+1
+4
+2
+3
+4
+4
+4
+5
+1
+5
+2
+6
+6
+6
+5
+10
+1
+1
+==========================================
+7
+0
+3
+4
+1
+4
+2
+3
+4
+4
+4
+5
+1
+5
+2
+6
+6
+6
+5
+10
+1
+1
+
+*/
+7
+0
+2
+4
+1
+4
+2
+2
+6
+3
+3
+10
+5
+4
+8
+1
+5
+12
+4
+6
+9
+6
+
+4
+0
+10
+5
+1
+20
+4
+2
+30
+2
+4
+40
+1

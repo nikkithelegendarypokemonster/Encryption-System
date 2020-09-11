@@ -1,0 +1,45 @@
+    while(cur_end<=max_at)
+    {
+    // variable i = current process
+    // variable point = next process
+        //find the next process by Priority
+        if(proc[i].CPU1<0){
+            i++;
+            point=find_next(i,n);
+        }else{
+        i=point;
+        point=find_next(i,n);
+        }
+      //  printf("point:%d",point);
+      //  printf("curend:%d, i:%d \n ",cur_end,i);
+        proc[i].S=cur_end;
+        proc[i].s[proc[i].sp]=proc[i].S;
+        proc[i].sp++;
+
+        if(cur_end>=max_at || i==point){
+            proc[i].E=cur_end+proc[point].CPU1;
+            proc[i].CPU1=0;
+            cur_end=proc[i].E;
+        }else{
+            if((proc[i].CPU1 + proc[i].AT)<proc[point].AT){
+                proc[i].E=proc[i].CPU1;
+                proc[i].CPU1=0;
+                cur_end=proc[point].AT;
+            }else{
+            proc[i].E=proc[point].AT;
+            proc[i].CPU1-=(proc[point].AT -proc[i].AT);
+            cur_end=proc[i].E;
+            }
+
+        }
+
+        proc[i].e[proc[i].ep]=proc[i].E;
+        proc[i].ep++;
+        if(proc[i].CPU1<=0){
+            proc[i].CPU1=-1;
+        }
+        //Save AT to AT array
+        proc[i].at[proc[i].ap]=proc[i].AT;
+        proc[i].ap++;
+
+   }

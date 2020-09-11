@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1596630883 source:c:\users\nikki\desktop\projects to pass in os\preemtivepriority\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+
