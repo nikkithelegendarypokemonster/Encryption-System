@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1572514238 source:c:\users\nikki\desktop\decryption\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<conio.h>
+
